@@ -1,0 +1,29 @@
+/* Only the CSS actually needed. A readable line length on wide screens,
+   a way for <pre> blocks not to blow out the page width, and borders on
+   tables (browsers don't draw them by default). Fonts, link colors, and
+   spacing are otherwise left entirely to the browser's own defaults. */
+
+body {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+pre {
+  overflow-x: auto;
+}
+
+pre code {
+  display: block;
+  padding-left: 1rem;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #999999;
+  padding: 0.4rem 0.6rem;
+}

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Billing — ezpz.host</title>
+<meta name="description" content="ezpz.host: simple and private.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header>
+<script src="/assets/nav.js"></script>
+</header>
+<hr>
+
+<main>
+<h1>Billing</h1>
+<p>ezpz.host bills in <strong>days per VM size</strong>, not currency. That's a deliberate choice: if we tracked a satoshi balance, a swing in bitcoin's price could shrink how long your server actually runs. By denominating in days, market movement is our risk, not yours.</p>
+
+<h2>Funding requests</h2>
+<p>Requesting funds (<code>POST /billing/fund</code>) with a size and a number of days does three things at once:</p>
+<ul>
+<li>Quotes that size at the current sats-per-day rate and <strong>locks it</strong> for the life of the request.</li>
+<li>Derives a fresh bitcoin address, watched for 24 hours (the same window the quote stays locked for).</li>
+<li>Returns the address and the exact amount to send for the days you asked for.</li>
+</ul>
+<p>A funding request moves through three states: <code>open</code> &rarr; <code>paid</code> (once your payment confirms) or <code>open</code> &rarr; <code>expired</code> (if the 24-hour window passes unpaid).</p>
+
+<h2>Converting sats to days</h2>
+<p>Whatever amount you actually send converts to days at the locked rate, rounded down. Send more than the suggested amount and you get proportionally more days; send less and you get fewer. Send less than one day's worth and the request settles paid with zero days credited, so send at least the suggested amount.</p>
+
+<h2>Buckets are independent per size</h2>
+<p>Days of one size never cover another size. If you have 30 <code>xs</code>-days funded but launch an <code>m</code> server, that server needs its own <code>m</code>-days, it can't draw from the <code>xs</code> bucket.</p>
+
+<h2>No grace period</h2>
+<p>Each running server burns one day from its size's bucket per day. When a bucket hits zero, the server using it is deleted on the next housekeeping pass, there's no warning email (we don't have your email) and no grace window. Check your status regularly and fund ahead of your runway.</p>
+
+<h2>Endpoints</h2>
+<table>
+<thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>GET</td><td><code>/billing/status</code></td><td>Days remaining per size, funding requests, recent ledger entries</td></tr>
+<tr><td>POST</td><td><code>/billing/fund</code></td><td>Get a fresh address and a locked quote for a size and number of days</td></tr>
+</tbody>
+</table>
+
+<h2>Example</h2>
+<pre><code>curl -X POST https://api.ezpz.host/billing/fund \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"size":"xs","days":30}'</code></pre>
+
+<p><a href="/doc/">&larr; Docs</a></p>
+</main>
+</body>
+</html>

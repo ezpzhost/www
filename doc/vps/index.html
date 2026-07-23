@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>VPS — ezpz.host</title>
+<meta name="description" content="ezpz.host: simple and private.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header>
+<script src="/assets/nav.js"></script>
+</header>
+<hr>
+
+<main>
+<h1>VPS</h1>
+<p>Creating, rebuilding, and deleting a server are all <strong>asynchronous</strong>, the request returns immediately, and you poll status until it's done.</p>
+
+<h2>Status</h2>
+<p>A VPS moves through these states:</p>
+<table>
+<thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>provisioning</code></td><td>Being created</td></tr>
+<tr><td><code>active</code></td><td>Running and reachable</td></tr>
+<tr><td><code>rebuilding</code></td><td>Being reinstalled in place</td></tr>
+<tr><td><code>deleting</code></td><td>Being destroyed</td></tr>
+<tr><td><code>deleted</code></td><td>Gone</td></tr>
+<tr><td><code>error</code></td><td>Something went wrong; not billed while in this state, cleaned up automatically if it stays broken</td></tr>
+</tbody>
+</table>
+
+<p>Rebuilding reinstalls the server from the same image you originally specified, <strong>your IP address stays the same</strong>.</p>
+
+<h2>Endpoints</h2>
+<table>
+<thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>GET</td><td><code>/vps/status</code></td><td>List your VPSs, or one with <code>?id=</code></td></tr>
+<tr><td>POST</td><td><code>/vps/create</code></td><td>Create a VPS (needs a funded day of the requested size)</td></tr>
+<tr><td>POST</td><td><code>/vps/delete</code></td><td>Delete a VPS</td></tr>
+<tr><td>POST</td><td><code>/vps/rebuild</code></td><td>Reinstall in place, same IP</td></tr>
+</tbody>
+</table>
+
+<h2>Example</h2>
+<pre><code>curl -X POST https://api.ezpz.host/vps/create \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "region": "usa",
+    "size": "xs",
+    "image": "ubuntu",
+    "ssh_key": "ssh-ed25519 AAAA..."
+  }'</code></pre>
+
+<p><a href="/doc/">&larr; Docs</a></p>
+</main>
+</body>
+</html>

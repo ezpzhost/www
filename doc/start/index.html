@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Getting started — ezpz.host</title>
+<meta name="description" content="ezpz.host: simple and private.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header>
+<script src="/assets/nav.js"></script>
+</header>
+<hr>
+
+<main>
+<h1>Getting started</h1>
+<p>Everything on ezpz.host happens through an HTTP API. Here's the whole flow, start to finish.</p>
+
+<h2>1. Generate a token</h2>
+<p>There's no signup. Generate 64 hex characters locally. That string is your token and your only credential:</p>
+<pre><code>openssl rand -hex 32</code></pre>
+<p>ezpz.host services only ever store a SHA-256 hash of your token, so it cannot be recovered if lost. Keep it safe.</p>
+
+<h2>2. Authenticate</h2>
+<p>Send it as a bearer token on every request:</p>
+<pre><code>Authorization: Bearer &lt;token&gt;</code></pre>
+
+<h2>3. Fund a size</h2>
+<p>Pick a size (see <a href="/servers/">Servers</a>) and how many days you want:</p>
+<pre><code>curl -X POST https://api.ezpz.host/billing/fund \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"size":"xs","days":30}'</code></pre>
+<p>This returns a fresh bitcoin address and the exact amount to send, at a rate locked for 24 hours.</p>
+
+<h2>4. Pay, then watch it credit</h2>
+<pre><code>curl -H "Authorization: Bearer &lt;token&gt;" \
+  https://api.ezpz.host/billing/status</code></pre>
+<p>Once your payment confirms, the days show up here.</p>
+
+<h2>5. Launch a server</h2>
+<pre><code>curl -X POST https://api.ezpz.host/vps/create \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "region": "usa",
+    "size": "xs",
+    "image": "ubuntu",
+    "ssh_key": "ssh-ed25519 AAAA..."
+  }'</code></pre>
+<p>Creating a server requires at least one funded day of that size, otherwise this returns <code>402</code>. Fund it first.</p>
+
+<h2>6. Wait for it to come online</h2>
+<pre><code>curl -H "Authorization: Bearer &lt;token&gt;" \
+  "https://api.ezpz.host/vps/status?id=&lt;id&gt;"</code></pre>
+<p>Poll until <code>status</code> is <code>active</code>, then:</p>
+<pre><code>ssh root@&lt;ipv4&gt;</code></pre>
+
+<p><a href="/doc/">&larr; Docs</a></p>
+</main>
+</body>
+</html>

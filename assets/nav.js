@@ -1,0 +1,1 @@
+document.write('<nav><a href="/">Home</a> | <a href="/servers/">Servers</a> | <a href="/doc/start/">Start</a> | <a href="/doc/">Docs</a> | <a href="/policy/">Policy</a> | <a href="/giants/">Giants</a></nav>');

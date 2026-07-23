@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>API — ezpz.host</title>
+<meta name="description" content="ezpz.host: simple and private.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header>
+<script src="/assets/nav.js"></script>
+</header>
+<hr>
+
+<main>
+<h1>API</h1>
+
+<p>Documentation for the API is available at <a href="https://api.ezpz.host/docs" target="_blank" rel="noopener noreferrer">api.ezpz.host/docs</a></p>
+
+<h2>Authentication</h2>
+
+<p>All API queries must be made with your self-generated secret token in the <code>Authorization</code> header. See <a href="/doc/token/">token</a> for details.</p>
+
+<pre><code>curl -X POST https://api.ezpz.host/billing/fund \
+  -H "Authorization: Bearer &lt;token&gt;" \
+  -H "Content-Type: application/json" \
+  -d '{"size":"xs","days":30}'</code></pre>
+
+<p><a href="/doc/">&larr; Docs</a></p>
+</main>
+</body>
+</html>

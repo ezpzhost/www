@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Tokens — ezpz.host</title>
+<meta name="description" content="ezpz.host: simple and private.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+<header>
+<script src="/assets/nav.js"></script>
+</header>
+<hr>
+
+<main>
+<h1>Token</h1>
+<p>Generate 64 hex characters locally, that string is your token and your only credential. There is no signup, no email, and no account to create. ezpz.host services only ever store a SHA-256 hash of your token, so it cannot be recovered if lost. Keep it safe.</p>
+
+<pre><code>openssl rand -hex 32</code></pre>
+
+<p>There's no password reset, no "forgot your token" flow, and no support ticket that can get it back for you, the hash we store can't be reversed. Back it up somewhere durable before you fund anything.</p>
+
+<h2>Using it</h2>
+<ol>
+<li>Send authenticated requests with the header: <code>Authorization: Bearer &lt;token&gt;</code></li>
+<li><code>POST /billing/fund</code> with a size and number of days to get a bitcoin address and a locked quote.</li>
+<li>Pay the address; <code>GET /billing/status</code> to watch the days credit.</li>
+<li><code>POST /vps/create</code> to launch a server of a size you've funded days for.</li>
+</ol>
+
+<h2>Endpoints</h2>
+<table>
+<thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td>GET</td><td><code>/token/status</code></td><td>Combined view: days and runway per size, plus VPS counts</td></tr>
+<tr><td>GET</td><td><code>/token/create</code></td><td>These same instructions, in machine-readable form, no auth required</td></tr>
+</tbody>
+</table>
+
+<p><a href="/doc/">&larr; Docs</a></p>
+</main>
+</body>
+</html>
